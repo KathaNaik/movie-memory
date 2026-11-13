@@ -27,7 +27,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     <CinemaBackdrop>
       <div className="flex flex-col items-center gap-5 text-center">
         <h1 className="text-4xl font-semibold tracking-tight xl:text-5xl">Movie Memory</h1>
-        <p className="max-w-md text-lg text-zinc-600">
+        <p className="max-w-md text-lg text-balance text-zinc-600">
           Save your favorite movie and discover fun facts about it.
         </p>
         {message && (

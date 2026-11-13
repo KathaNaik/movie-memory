@@ -11,6 +11,16 @@ Built for the Scowtt take-home, Variant B (frontend/API), plus the parts of Vari
 
 Stack: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Postgres on Neon, Prisma 7, Auth.js v5 (Google), the OpenAI SDK, Zod, Vitest and React Testing Library.
 
+## Screenshots
+
+The sign-in page:
+
+![Sign-in page with the cinema artwork and a "Sign in with Google" button](docs/screenshots/sign-in.png)
+
+The dashboard, with the favorite movie, inline Edit, and a generated fact showing which film the model identified:
+
+![Dashboard showing the user's favorite movie, Spirited Away, and an AI-generated fact about it](docs/screenshots/dashboard.png)
+
 ## Setup
 
 You need:
@@ -75,5 +85,7 @@ The live app runs on Vercel:
 1. Set the environment variables above in the Vercel project, for the Production environment. `DIRECT_URL` isn't needed there.
 2. Add `https://<your-domain>/api/auth/callback/google` as a redirect URI on the Google OAuth client.
 3. Run `npx prisma migrate deploy` against the production database before deploying schema changes.
+
+Outside Vercel (for example `npm run build && npm start` on your own server), also set `AUTH_TRUST_HOST=true` or `AUTH_URL`. Without one of them, Auth.js rejects the host and nobody can sign in. On Vercel this is automatic.
 
 If Google shows "access blocked" on the live app, the OAuth consent screen is in testing mode and your Google account needs to be added as a test user.

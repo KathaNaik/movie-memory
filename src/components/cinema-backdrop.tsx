@@ -7,18 +7,19 @@ import cinemaBackground from "./cinema-background.png";
  * Fills the available space with the cinema artwork and places `children`
  * inside its white panel.
  *
- * From lg up, the artwork is scaled like `background-size: cover` (filling
- * width and height, centered). Because the white panel is centered in the
- * artwork, it stays centered on screen, and percentage insets measured from
- * the image keep the content inside it. Only the decorated edges get cropped.
+ * From lg up, the artwork is scaled like `background-size: cover`: at least
+ * as wide as this element and as tall as the viewport, centered. Because the
+ * white panel is centered in the artwork, it stays centered on screen, and
+ * percentage insets measured from the image keep the content inside it. Only
+ * the decorated edges get cropped. (Viewport height rather than container
+ * query units: `cqh` resolves to 0 here because this element's height comes
+ * from flex-grow inside a min-height body, which isn't definite.)
  * Below lg the panel would be too small, so content sits on a plain white card.
  */
 export function CinemaBackdrop({ children }: { children: ReactNode }) {
   return (
-    // Size containment (lg only) lets the artwork size itself from this
-    // element's height via cqh units.
-    <main className="relative flex flex-1 items-center justify-center overflow-hidden bg-[#f4edf9] px-4 py-10 text-zinc-900 lg:p-0 lg:[container-type:size]">
-      <div className="relative w-full max-w-md lg:absolute lg:top-1/2 lg:left-1/2 lg:aspect-[2118/1189] lg:w-[max(100cqw,calc(100cqh*2118/1189))] lg:max-w-none lg:-translate-x-1/2 lg:-translate-y-1/2">
+    <main className="relative flex flex-1 items-center justify-center overflow-hidden bg-[#f4edf9] px-4 py-10 text-zinc-900 lg:p-0">
+      <div className="relative w-full max-w-md lg:absolute lg:top-1/2 lg:left-1/2 lg:aspect-[2118/1189] lg:w-[max(100%,calc(100dvh*2118/1189))] lg:max-w-none lg:-translate-x-1/2 lg:-translate-y-1/2">
         <Image
           src={cinemaBackground}
           alt=""
