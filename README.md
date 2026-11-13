@@ -4,7 +4,7 @@ Sign in with Google, save your favorite movie, and get fun facts about it writte
 
 Live app: https://moviememory-app.vercel.app
 
-Built for the Scowtt take-home, Variant B (frontend/API), plus the parts of Variant A that don't conflict with it.
+Built for the Scowtt take-home, Variant B (frontend/API).
 
 - [Architecture, decisions and trade-offs](docs/ARCHITECTURE.md): how it works, why Variant B, schema and caching decisions, failure handling, and what I'd do next
 - [How I used AI](docs/AI_USAGE.md)
