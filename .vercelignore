@@ -1,0 +1,10 @@
+# Never upload local secrets; Vercel has its own environment variables.
+.env
+.env.*
+!.env.example
+
+# Rebuilt on Vercel.
+node_modules
+.next
+src/generated
+*.tsbuildinfo
