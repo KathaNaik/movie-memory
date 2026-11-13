@@ -1,0 +1,94 @@
+// Prisma 7: connection URLs live in prisma.config.ts (CLI) and src/lib/db.ts
+// (runtime driver adapter), not in this file.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --- Auth.js models (https://authjs.dev/getting-started/adapters/prisma) ---
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // null until the user completes onboarding.
+  favoriteMovie String?
+
+  accounts   Account[]
+  sessions   Session[]
+  movieFacts MovieFact[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+  // PostgreSQL does not index foreign keys automatically.
+  @@index([userId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// --- Application models ---
+
+// A generated fact about a movie. The title is stored on each fact (no separate
+// Movie table), so facts stay attached to the movie they were generated for even
+// if the user later changes their favorite.
+model MovieFact {
+  id              String   @id @default(cuid())
+  userId          String
+  movieTitle      String
+  // The film the model identified from movieTitle, e.g. "Barbie: Princess
+  // Charm School (2011)". Shown with the fact so a misidentification is visible.
+  identifiedTitle String?
+  content         String
+  createdAt       DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Serves "facts for this user + movie, newest first" and, via its prefix,
+  // "all facts for this user".
+  @@index([userId, movieTitle, createdAt(sort: Desc)])
+}
